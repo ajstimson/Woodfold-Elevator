@@ -424,10 +424,6 @@ function meta_user_id($user){
 		$user = get_current_user_id();
 		$secondary_hash = random_token(9);
 
-		//TEMP OVERRIDE
-		//TODO REMOVE BEFORE GOING LIVE
-		$user = 8;
-
 		echo '<meta property="user-id" content="' . $user . '">';
 		echo '<meta property="secondary-cart-item" content="' . $secondary_hash . '">';
 	}

@@ -64,7 +64,7 @@
 
         $(".edit-saved").click(function() {
             var item_id = $(this).data("item");
-            window.location.replace("/elevator-form/?itemID=" + item_id);
+            window.location.replace("/elevator/order-form/?itemID=" + item_id);
         });
 
 
@@ -567,6 +567,12 @@
         html += configDataList('Price (USD)',
             'text', '$' +
             obj.quote.value
+        );
+
+        html += configDataList(
+            'Additional Notes',
+            obj.additional_information.type,
+            obj.additional_information.value
         );
 
         html += '</ul>';

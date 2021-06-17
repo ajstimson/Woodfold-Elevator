@@ -16,9 +16,19 @@
         */
 
         // only allow one panel selection at a time (for non-vision panels)
-        $(document).on('click', '.panel-item.gate-render .gfield_radio label', function() {
+        // and disable side channel selection for alumifold panels
+        $(document).on('click', '.panel-item.gate-render .gfield_radio label', function(e) {
             var input = $(this).closest(input);
             $(".panel-item.gate-render .gfield_radio input").not(input).prop("checked", false);
+
+            var alumifold = e.target.src.includes("alumifold") || e.target.src.includes("perforated");
+
+            if (alumifold === true) {
+                toggleSideChannel('disable');
+            } else {
+                toggleSideChannel('enable');
+            }
+
         });
 
         //If Special Finish is selected toggle input field
@@ -28,6 +38,7 @@
             toggleColorType(a);
             toggleRushShipping(a);
         });
+
 
     });
 
@@ -430,6 +441,15 @@
 
     function getFuncName() {
         return getFuncName.caller.name
+    }
+
+    function toggleSideChannel(state) {
+        var target = $('#input_1_34 input');
+        if (state === 'disable') {
+            $(target).prop('disabled', true).addClass('disabled');
+        } else {
+            $(target).prop('disabled', false).removeClass('disabled');
+        }
     }
 
 })(jQuery);

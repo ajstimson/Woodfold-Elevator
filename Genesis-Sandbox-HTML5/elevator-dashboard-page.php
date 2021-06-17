@@ -253,7 +253,7 @@ function dashboard_content($user){
     $id = get_current_user_id();
 
     // TODO REMOVE THE LINE BELOW BEFORE PRODUCTION
-    $id = 8;
+    // $id = 8;
 	$table = $wpdb->prefix . "elevator_form_entries";
 
 	sanitize_order_output($id, $table);

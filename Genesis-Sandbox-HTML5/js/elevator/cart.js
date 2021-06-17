@@ -181,7 +181,7 @@
             html += '</div>';
             html += '<div class="modal-footer">';
             html += '<button type="button" class="btn btn-secondary clear-cart">Clear Cart</button>';
-            html += '<button type="button" class="btn btn-secondary new-order" onclick="window.location.href = `/elevator-form/`;">Create New Order</button>';
+            html += '<button type="button" class="btn btn-secondary new-order" onclick="window.location.href = `/elevator/order-form/`;">Create New Order</button>';
             html += '<a href="/success/" class="btn btn-primary complete-order">Complete Order</a>';
             html += '</div></div></div></div>';
             html += '<div class="modal" id="exampleM" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">';
@@ -636,11 +636,16 @@
                             document.head.querySelector("[property~=cart-item][content]").content = randomToken(18);
 
                             var el = $('#form-save button');
+
                             savedConfirmation(el);
+
+                            wholePageLoader('end');
 
                         } else {
 
                             alert('Could not save configuration. Please try again');
+
+                            wholePageLoader('end');
 
                         }
                     }
@@ -675,7 +680,7 @@
 
                             getCartContents();
 
-                            window.location.replace("/elevator-form/?itemID=" + data.id);
+                            window.location.replace("/elevator/order-form/?itemID=" + data.id);
 
                         }
 
@@ -687,11 +692,21 @@
         }
 
         function savedConfirmation(el) {
-
             var check = '<i class="fa fa-check"></i>';
 
             $(el).addClass('saved').html(check);
 
+            var message = 'Configuration saved! Click "OK" to proceed to Dashboard';
+            var url = '/elevator/user-dashboard/';
+
+            if (!confirm(message)) {
+                //Reload page
+                location.reload();
+
+            } else {
+                //Redirect to dashboard
+                window.location.href = url;
+            }
         }
 
         function createNewOrder(order) {
@@ -950,7 +965,7 @@ var shoppingCart = (function() {
 
                 saveCart();
 
-                var url = '/elevator-form?session=' + session + '&itemID=' + id;
+                var url = '/elevator/order-form/?session=' + session + '&itemID=' + id;
 
                 window.location.href = url;
             }

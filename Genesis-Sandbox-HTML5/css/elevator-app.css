@@ -682,6 +682,11 @@ li[class*='config-item'] {
     flex-grow: 0;
 }
 
+#frames-items-right #field_1_34 input.disabled+label {
+    opacity: .75;
+    cursor: no-drop;
+}
+
 #options-sidebar .flex-item.input-v2 .swatch .gfield_radio label {
     font-size: .8rem;
     font-weight: bold;
@@ -752,15 +757,18 @@ li[class*='config-item'] {
     color: #fff;
 }
 
-#options-sidebar .directional-buttons .next:hover {
+#options-sidebar .directional-buttons .next:hover,
+#options-sidebar .directional-buttons .next:focus {
     background: #fff;
 }
 
-#options-sidebar .directional-buttons .next:hover p {
+#options-sidebar .directional-buttons .next:hover p,
+#options-sidebar .directional-buttons .next:focus p {
     color: #E2701E;
 }
 
-#options-sidebar .directional-buttons .next:hover path {
+#options-sidebar .directional-buttons .next:hover path,
+#options-sidebar .directional-buttons .next:focus path {
     fill: #E2701E!important;
 }
 
@@ -955,7 +963,11 @@ li[class*='config-item'] {
 #address-items-left .rendered,
 #input_1_91 label,
 #input_1_91 input {
-    cursor: not-allowed;
+    cursor: no-drop;
+}
+
+#address-items-left li.address-item input.rendered {
+    color: #757575;
 }
 
 #input_1_91 label,
@@ -2213,6 +2225,7 @@ ul.flex-slide {
 
 #form-save button,
 #gform_1 .gform_footer input:hover,
+#gform_1 .gform_footer input:focus,
 #request-quote button:hover {
     background-color: #fff;
     color: #e2701e;

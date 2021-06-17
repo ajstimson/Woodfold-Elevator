@@ -71,6 +71,9 @@
             //reset element scroll positions
             resetMainOptionScrollPositions();
 
+            //Make directional buttons and radio label buttons focusable
+            makeFocusable();
+
             document.addEventListener('click', function(event) {
                 // If the clicked element doesn't have the right selector, bail
                 if (!event.target.matches('#menu-elevator-footer a')) return;
@@ -515,6 +518,13 @@
             return urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : '');
         }
         return url;
+    }
+
+    function makeFocusable() {
+        var next = document.querySelectorAll('.directional-buttons .next');
+        for (var i = 0, len = next.length; i < len; i++) {
+            next[i].setAttribute('tabindex', '0');
+        }
     }
 
 })(jQuery);

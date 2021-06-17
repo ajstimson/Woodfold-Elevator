@@ -47,6 +47,14 @@
             previous = this;
         });
 
+        $("label").on('click', function(e) {
+            if (this.classList.contains('disabled')) {
+                console.log('UP!')
+                e.preventDefault;
+                return false;
+            }
+        });
+
         // when clicking a panel or frame option render gate config image
         $(document).on("change", '.panel-item .gfield_radio li:not(.no-gate-render) input, .frame-item .gfield_radio input, #vision-selections select', function(e) {
 
@@ -177,6 +185,7 @@
 
         // disable all other options to prevent user input
         $('#input_1_91 input:not(:checked)').attr('disabled', true);
+        $('#input_1_91 input').addClass('rendered');
 
     }
 
@@ -333,44 +342,45 @@
 
     }
 
-    function visionPanelOptions() {
+    //TODO: REMOVE COMMENTED CODE BELOW
+    // function visionPanelOptions() {
 
-        var a = checkPanel();
+    //     var a = checkPanel();
 
-        if (a == false) {
-            // If a vision panel is not selected hide sub-panel options
-            $('#field_1_35,#field_1_37,#clear-button').css({
-                'height': '0',
-                'visibility': 'hidden'
-            });
+    //     if (a == false) {
+    //         // If a vision panel is not selected hide sub-panel options
+    //         $('#field_1_35,#field_1_37,#clear-button').css({
+    //             'height': '0',
+    //             'visibility': 'hidden'
+    //         });
 
-        } else {
-            // otherwise show sub-panel options
-            $('#field_1_35,#field_1_37,#clear-button').css({
-                'height': 'auto',
-                'visibility': 'visible'
-            });
+    //     } else {
+    //         // otherwise show sub-panel options
+    //         $('#field_1_35,#field_1_37,#clear-button').css({
+    //             'height': 'auto',
+    //             'visibility': 'visible'
+    //         });
 
-            //$('#input_1_37').prop('disabled', 'disabled');
+    //         //$('#input_1_37').prop('disabled', 'disabled');
 
-        }
-    }
+    //     }
+    // }
 
-    function checkPanel() {
-        var result = false;
+    // function checkPanel() {
+    //     var result = false;
 
-        $('#input_1_27 input').each(function() {
+    //     $('#input_1_27 input').each(function() {
 
-            var b = $(this).prop("checked");
+    //         var b = $(this).prop("checked");
 
-            if (b == true) {
+    //         if (b == true) {
 
-                result = true;
-            }
-        });
+    //             result = true;
+    //         }
+    //     });
 
-        return result;
-    }
+    //     return result;
+    // }
 
     function renderGate(el = null, defaultFrame = false) {
 
@@ -428,6 +438,7 @@
                 Teak
                 Acrylic Bronze
                 Acrylic Clear
+                Acrylic Smoke
                 ...and any other panel selection not defined below
             !! Frame Array order is Track, Hinge Hardware, Lead Post, Side Channels 
         */
@@ -452,8 +463,9 @@
             frame_arr = ['Anodized Silver', 'Anodized Silver', 'White', 'White'];
         }
 
-        if (panelSelected === 'Perforated Silver' ||
-            panelSelected === 'Clear' ||
+        if (panelSelected === 'Acrylic Clear' ||
+            panelSelected === 'Acrylic Smoke' ||
+            panelSelected === 'Perforated Silver' ||
             panelSelected === 'Gray') {
             frame_arr = ['Anodized Silver', 'Anodized Silver', 'Gray', 'Anodized Silver'];
         }
@@ -725,7 +737,7 @@
 
     function toggleFinishOptions(panel) {
         var parent = $(panel).closest('li'),
-            enableSpecialFinish = parent[0].classList.contains('natural-hardwood-veneers'),
+            hardwoodVeneer = parent[0].classList.contains('natural-hardwood-veneers'),
             clearFinishOption = $('#field_1_89 input[value="Clear Finish"]'),
             clearFinishLabel = $(clearFinishOption).next('label'),
             unfinishedOption = $('#field_1_89 input[value="Unfinished"]'),
@@ -733,46 +745,32 @@
             specialFinishOption = $('#field_1_89 input[value="Special Finish"]'),
             specialFinishLabel = $(specialFinishOption).next('label');
 
-        if (enableSpecialFinish === true || panel[0].value === 'MDF No Finish') {
 
-            finishToggle(specialFinishOption, specialFinishLabel, false);
-
-        } else {
-
+        if (hardwoodVeneer === true || panel[0].value === 'Custom') {
             finishToggle(specialFinishOption, specialFinishLabel, true);
-
-        }
-
-        if (panel[0].value === 'MDF No Finish') {
-
-            finishToggle(clearFinishOption, clearFinishLabel, true);
-            toggleSpecialFinish();
-
-        } else {
-
-            finishToggle(clearFinishOption, clearFinishLabel, false);
-
-            $('#label_1_89_0').click();
-        }
-
-        if (panel[0].value === 'Custom') {
-
-            finishToggle(specialFinishOption, specialFinishLabel, false);
             finishToggle(clearFinishOption, clearFinishLabel, true);
             finishToggle(unfinishedOption, unfinishedLabel, true);
-            toggleSpecialFinish();
-
+        } else {
+            finishToggle(specialFinishOption, specialFinishLabel, false);
+            finishToggle(clearFinishOption, clearFinishLabel, false);
+            finishToggle(unfinishedOption, unfinishedLabel, false);
         }
 
+        if (panel[0].value === 'Custom' || panel[0].value === 'MDF No Finish') {
+            toggleSpecialFinish();
+        }
     }
 
     function finishToggle(option, label, state) {
 
-        $(option).attr('disabled', state);
-        if (state === false) {
+        $(option).prop('checked', state);
+
+        if (state === true) {
             $(label).removeClass('disabled');
+            $(option).prop('disabled', false);
         } else {
             $(label).addClass('disabled');
+            $(option).attr('disabled', true);
         }
 
     }
@@ -1018,5 +1016,56 @@
     function getFuncName() {
         return getFuncName.caller.name
     }
+
+
+    //Keep this here to avoid missing addClass methods used above
+    document.addEventListener("keydown", function(event) {
+        var code = event.keyCode || event.which;
+        if (code == 13) {
+            event.preventDefault();
+
+            var active = document.activeElement,
+                next = active.classList.contains('next');
+
+            if (active && active.tabIndex === 0 && next === false && active.href === undefined && active.type !== 'submit') {
+                var focussableElements = 'div.next, a:not([disabled]), select:not([disabled]), button:not([disabled]), input:not([disabled]):not(.rendered),[tabindex]:not([disabled]):not([tabindex="-1"])';
+                var focussable = Array.prototype.filter.call(
+                    document.activeElement.form.querySelectorAll(focussableElements),
+                    function(element) {
+                        //check for visibility while always include the current activeElement 
+                        return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
+                    });
+                var index = focussable.indexOf(active);
+                if (index > -1) {
+                    var nextElement = focussable[index + 1] || focussable[0];
+                    nextElement.focus();
+                }
+            }
+
+            if (next === true) {
+                active.click();
+                document.querySelector('#options-sidebar ul.active input:first-of-type').focus();
+            }
+
+            if (active.tabIndex === -1) {
+                document.querySelector('#options-sidebar ul.active .next').focus();
+            }
+
+            if (active.href !== undefined) {
+                document.querySelector('#options-sidebar ul.active input:not([type=radio]), #options-sidebar ul.active .next').focus();
+            }
+
+            if (active.type === 'submit') {
+                var message = 'Are you sure you want to complete your order?';
+
+                if (!confirm(message)) {
+                    active.blur();
+                    return false;
+                } else {
+                    active.click();
+                }
+            }
+        }
+    });
 
 })(jQuery);
